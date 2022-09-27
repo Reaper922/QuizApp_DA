@@ -1,0 +1,39 @@
+html {
+    height: 100vh;
+}
+
+body {
+    height: 100%;
+    background: #233654;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.question-card {
+    width: 30rem;
+}
+
+.card-image {
+    height: 10rem;
+    object-fit: cover;
+}
+
+.answer {
+    cursor: pointer;
+}
+
+.answer:hover {
+    background: rgb(200, 200, 200);
+}
+
+.card-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+}
