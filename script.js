@@ -1,16 +1,22 @@
 'use strict';
 
 let currentQuestion = 0;
+let correctQuestions = 0;
 
 function init() {
     updateQuestionCard();
     addAnswerEventListener();
     addNextButtonEventListener();
+    addPlayAgainButtonEventListener();
 }
 
 function updateQuestionCard() {
+    resetAnswerClasses();
+    toggleNextButton();
     showQuestion();
+    enableAnswerButtons();
     updateQuestionLabel();
+    updateProgressBar();
 }
 
 function showQuestion() {
@@ -29,10 +35,21 @@ function showQuestion() {
 
 function updateQuestionLabel() {
     const questionNumberEl = document.getElementById('question-number');
-    const questionAmountEl = document.getElementById('question-amount');
+    const questionAmountsEl = document.getElementsByClassName('question-amount');
 
     questionNumberEl.innerHTML = currentQuestion + 1;
-    questionAmountEl.innerHTML = questions.length;
+
+    for (let amountEl of questionAmountsEl) {
+        amountEl.innerHTML = questions.length;
+    }
+}
+
+function updateProgressBar() {
+    const progressBar = document.getElementById('progress-bar');
+    let progress = (currentQuestion) / questions.length;
+    progress = Math.round(progress * 100);
+    
+    progressBar.style = `width: ${progress}%`
 }
 
 function addAnswerEventListener() {
@@ -49,18 +66,42 @@ function addNextButtonEventListener() {
     nextQuestionBtn.addEventListener('click', nextQuestion);
 }
 
+function addPlayAgainButtonEventListener() {
+    const playAgainBtn = document.getElementById('play-again');
+
+    playAgainBtn.addEventListener('click', resetGame);
+}
+
 function validateAnswer(answerId) {
     const question = questions[currentQuestion];
     const answersEl = document.getElementsByClassName('answer');
     
     if ((answerId + 1) === question.rightAnswer) {
-        answersEl[answerId].classList.add('bg-success');
+        correctQuestions++;
+        answersEl[answerId].classList.add('bg-success', 'text-white');
+        playSound(true);
     } else {
-        answersEl[answerId].classList.add('bg-danger');
-        answersEl[question.rightAnswer - 1].classList.add('bg-success');
+        answersEl[answerId].classList.add('bg-danger', 'text-white');
+        answersEl[question.rightAnswer - 1].classList.add('bg-success', 'text-white');
+        playSound(false);
     }
-
+    
+    disableAnswerButtons(answersEl);
     toggleNextButton();
+}
+
+function disableAnswerButtons(answersEl) {
+    for (let answer of answersEl) {
+        answer.disabled = true;
+    }
+}
+
+function enableAnswerButtons() {
+    const answersEl = document.getElementsByClassName('answer');
+
+    for (let answer of answersEl) {
+        answer.disabled = false;
+    }
 }
 
 function toggleNextButton() {
@@ -72,18 +113,65 @@ function toggleNextButton() {
 function nextQuestion() {
     currentQuestion++;
 
-    resetAnswerClasses();
-    toggleNextButton();
-    updateQuestionCard();
+    if (currentQuestion >= questions.length) {
+        updateRightAnswersLabel();
+        updateProgressBar();
+        showEndScreen();
+    } else {
+        updateQuestionCard();
+    }
+}
+
+function updateRightAnswersLabel() {
+    const correctAnswersEl = document.getElementById('correct-answers');
+
+    correctAnswersEl.innerHTML = correctQuestions;
+}
+
+function showEndScreen() {
+    const questionScreen = document.getElementById('question-screen');
+    const endScreen = document.getElementById('end-screen');
+    const cardImage = document.getElementById('card-image');
+
+    questionScreen.classList.add('d-none');
+    endScreen.classList.remove('d-none');
+    cardImage.src = './img/confetti.jpg';
 }
 
 function resetAnswerClasses() {
     const answersEl = document.getElementsByClassName('answer');
 
     for (let answer of answersEl) {
-        answer.classList.remove('bg-success');
-        answer.classList.remove('bg-danger');
+        answer.classList.remove('bg-success', 'text-white');
+        answer.classList.remove('bg-danger', 'text-white');
     }
 }
+
+function resetGame() {
+    const questionScreen = document.getElementById('question-screen');
+    const endScreen = document.getElementById('end-screen');
+    const cardImage = document.getElementById('card-image');
+
+    questionScreen.classList.remove('d-none');
+    endScreen.classList.add('d-none');
+    cardImage.src = './img/card.jpg';
+
+    currentQuestion = 0;
+    correctQuestions = 0;
+
+    updateQuestionCard();
+}
+
+function playSound(isCorrect) {
+    const soundCorrect = new Audio('./sounds/correct.wav');
+    const soundWrong = new Audio('./sounds/wrong.wav');
+
+    if (isCorrect) {
+        soundCorrect.play();
+    } else {
+        soundWrong.play();
+    }
+}
+
 
 init();

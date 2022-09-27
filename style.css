@@ -1,8 +1,6 @@
 body {
     height: 100vh;
-    /* background: #233654; */
-    background: rgb(2,0,36);
-    background: linear-gradient(0deg, rgba(2,0,36,1) 0%, rgba(35,54,84,1) 30%, rgba(0,148,179,1) 100%);
+    background: linear-gradient(0deg, rgb(2, 0, 36) 0%, rgba(35,54,84,1) 30%, rgba(0,148,179,1) 100%);
 }
 
 main {
@@ -24,6 +22,7 @@ main {
 
 .answer {
     cursor: pointer;
+    text-align: start;
 }
 
 .answer:hover {
@@ -37,13 +36,15 @@ main {
     margin-top: 12px;
 }
 
-/* Bootstrap */
-.bg-success {
-    color: white;
-    opacity: 0.9;
+.d-none {
+    display: none;
 }
 
-.bg-danger {
-    color: white;
-    opacity: 0.9;
+/* Bootstrap */
+.progress {
+    border-radius: 0;
+}
+
+.progress-bar {
+    width: 0%;
 }
