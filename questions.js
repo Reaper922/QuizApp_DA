@@ -48,7 +48,7 @@ questions = [
         "rightAnswer": 3
     },
     {
-        "question": "Wie deklariert man mit JavaScript eine Funktion?",
+        "question": "Wie deklariert man in JavaScript eine Funktion?",
         "answer1": "function:myFunction()",
         "answer2": "function myFunction()",
         "answer3": "function = myFunction()",
