@@ -136,6 +136,8 @@ function showEndScreen() {
     questionScreen.classList.add('d-none');
     endScreen.classList.remove('d-none');
     cardImage.src = './img/confetti.jpg';
+
+    startConfetti();
 }
 
 function resetAnswerClasses() {
@@ -159,6 +161,7 @@ function resetGame() {
     currentQuestion = 0;
     correctQuestions = 0;
 
+    stopConfetti();
     updateQuestionCard();
 }
 
